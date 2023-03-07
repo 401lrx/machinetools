@@ -1,0 +1,123 @@
+# 环境初始化默认配置
+# 自用环境
+:env-lrx:
+	--setcmd export SSH_DEFAULT_USER=ruixiangliu
+        --setcmd export SSH_OPT='-p 22'
+	--setcmd export SCP_OPT='-P 22'
+        --setcmd export WORKSPACE_DIR=/data/MyServer
+        --setcmd export LOG_DIR=/data/applog/IDLE
+
+# 开发环境
+:env-d:
+	--setcmd export SSH_DEFAULT_USER=moonton
+        --setcmd export SSH_OPT='-p 36000'
+        --setcmd export SCP_OPT='-P 36000'
+        --setcmd export LOG_DIR=/data/applog/IDLE
+        --setcmd export BIN_DIR=/data/app/IDLE
+
+# 阿里云
+:env-a:
+        --setcmd export SSH_DEFAULT_USER=moonton
+        --setcmd export LOG_DIR=/data/applog/IDLE
+        --setcmd export BIN_DIR=/data/app/IDLE
+
+# 使用规范
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+
+#子参数
+#	setip		ip列表
+#	setenv		环境
+#	setpath		路径
+#	setcmd		命令
+#	sshuser 	ssh用户，仅mygo生效
+#	sshoption	ssh参数，仅mygo生效
+#	setsshusr	ssh用户，putfile,shellex,mygo都生效
+#	setsshport	ssh端口，putfile,shellex,mygo都生效
+#
+#
+#
+#
+
+# 其他环境参数配置
+lrx
+        --setip 192.168.5.233
+        --setenv lrx
+        --setsshport 22
+        --setsshusr ruixiangliu
+        --setpath /data
+        --setcmd ls -l
+
+dev
+        --setip 192.168.30.63 192.168.30.64 192.168.60.15
+        --setip 192.168.30.130
+        --setenv d
+        --setsshport 36000
+        --setsshusr moonton
+        --setpath $LOG_DIR
+        --setcmd ls -l
+
+ali
+        --setip 47.103.102.47
+        --setenv a
+        --setsshport 22
+        --setsshusr moonton
+        --setpath $LOG_DIR
+
+# 目录跳转用配置
+toolsfunc
+        --setpath[lrx] /home/ruixiangliu/tool
+
+w
+        --setpath[lrx] $WORKSPACE_DIR
+
+w[[:graph:]]+
+        --setpath[lrx] $WORKSPACE_DIR/${1#w}
+
+log
+        --setpath $LOG_DIR
+        --setcmd ls -l
+
+[[:digit:]]+
+[[:digit:]]+ log
+        --setpath $LOG_DIR/idle.zone.${1}/GameServer
+        --setcmd ls -l
+
+[[:digit:]]+ bin
+        --setpath $BIN_DIR/idle.zone.${1}/GameServer
+        --setcmd ls -l
+
+[[:alnum:]]+Server
+        --setpath $LOG_DIR/${1}
+        --setcmd ls -l
+
+[[:alnum:]]+Server bin
+        --setpath $BIN_DIR/${1}
+        --setcmd ls -l
+
+GlobalArenaServer|CrossServer [[:digit:]]+
+        --setpath $LOG_DIR/idle.zone.$2/${1}
+        --setcmd ls -l
+
+GlobalArenaServer|CrossServer [[:digit:]]+ bin
+        --setpath $BIN_DIR/idle.zone.$2/${1}
+        --setcmd ls -l
+
+[[:alnum:]]+Server [[:digit:]]+
+        --setpath $LOG_DIR/idle.region.$2/${1}
+        --setcmd ls -l
+
+
+[[:alnum:]]+Server [[:digit:]]+ bin
+        --setpath $BIN_DIR/idle.region.$2/${1}
+        --setcmd ls -l
+
