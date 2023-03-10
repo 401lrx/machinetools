@@ -1,0 +1,104 @@
+#!/bin/bash
+
+PROGRAM_NAME=$0
+cd `(dirname $PROGRAM_NAME)`
+
+function usage()
+{
+    cat << EOF
+
+Usage: $PROGRAM_NAME [arguments]
+
+Arguments:
+    -h, --help          Print Help and exit
+    -i, --install       Perform installation
+        --reinstall     Remove installed parts and perform installation
+    -c, --clean         Remove installed parts 
+    -p, --part=PART     Specify a part to install or clean
+    -l, --list-part     List all installable parts
+
+EOF
+}
+
+source machinefunc.sh
+
+if [[ $# == 0 ]];then
+    usage
+    exit 0
+fi
+
+short_opts="hicp:l"
+long_opts="help,install,clean,part:,list-part,reinstall"
+TEMP=$(getopt -n $PROGRAM_NAME -o "$short_opts" --long "$long_opts" -- "$@")
+
+if [[ $? -ne 0 ]];then
+    error "Error parsing arguments. Try $PROGRAM_NAME --help"
+    exit 1
+fi
+
+PART="all"
+EXE=""
+
+eval set -- "$TEMP"
+while true; do
+    case $1 in
+        -h|--help)
+            usage
+            exit 0
+        ;;
+        -i|--install)
+            if [[ "$EXE" == "" ]];then
+                EXE="install"
+            fi
+            shift; continue
+        ;;
+        --reinstall)
+            if [[ "$EXE" == "" ]];then
+                EXE="reinstall"
+            fi
+            shift; continue
+        ;;
+        -c|--clean)
+            if [[ "$EXE" == "" ]];then
+                EXE="clean"
+            fi
+            shift; continue
+        ;;
+        -p|--part)
+            PART="$2"; shift 2; continue
+        ;;
+        -l|--list-part)
+            if [[ "$EXE" == "" ]];then
+                EXE="listparts"
+            fi
+            shift; continue
+        ;;
+        --)
+            # no more arguments to parse
+            break
+        ;;
+        *)
+            error "Unknow option " $1
+            exit 1
+        ;;
+    esac
+done
+
+case $EXE in
+    install)
+        installParts $PART
+    ;;
+    reinstall)
+        cleanParts $PART
+        installParts $PART
+    ;;
+    clean)
+        cleanParts $PART
+    ;;
+    listparts)
+        listAllParts
+    ;;
+    *)
+        normalp "Nothing has been done"
+    ;;
+esac
