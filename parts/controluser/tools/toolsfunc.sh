@@ -48,10 +48,17 @@ function showip()
     fi
 }
 
-export PS1='[\u@'"$(showip in | head -1)"':\w]\$ '
-if [[ $(whoami) == "root" ]]; then
-    PS1='[\[\033[1;31m\]\u\[\033[0m\]@'"$(showip in | head -1)"':\w]\$ '
-fi
+case $(whoami) in
+    root)
+        PS1='[\[\033[1;31m\]\u\[\033[0m\]@'"$(showip in | head -1)"':\w]\$ '
+    ;;
+    homecc)
+        PS1='[\[\033[1;32m\]\u\[\033[0m\]@'"$(showip in | head -1)"':\w]\$ '
+    ;;
+    *)
+        PS1='[\u@'"$(showip in | head -1)"':\w]\$ '
+    ;;
+esac
 
 function listargs()
 {

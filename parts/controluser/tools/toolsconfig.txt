@@ -12,21 +12,13 @@
 
 
 ############################ 环境配置 #############################
-#:env-lrx:
-#       --setcmd export SSH_DEFAULT_USER=ruixiangliu
-#       --setcmd export SSH_OPT='-p 22'
-#       --setcmd export SCP_OPT='-P 22'
+:env-home:
+       --setcmd export SSH_DEFAULT_USER=homecc
+       --setcmd export SSH_OPT='-p 22'
+       --setcmd export SCP_OPT='-P 22'
 
 
 ######################### 其他环境参数配置 ########################
-#toolsfunc
-#        --setpath[lrx] /home/ruixiangliu/toolsfunc
-
-#lrx
-#        --setip 192.168.5.233
-#        --setenv lrx
-#        --setsshport 22
-#        --setsshusr ruixiangliu
-#        --setpath /data
-#        --setcmd ls -l
+work
+        --setpath /work/
 

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 cd `dirname $0`
 
 function usage()
@@ -14,12 +13,8 @@ fi
 
 # 特殊密码
 pw=$(echo '
-192.168.5.252 homecc 19950127*homecc*router* 
-192.168.5.252 root 19950127*homecc*router*
-192.168.5.239 root 19950127*root*xlh*
 
-' | sed '/^[[:space:]]*#/d; /^[[:space:]]*$/d; ' | awk -vip="$1" -vusr="$2" 'NF==3 && ip==$1 && usr==$2 {print $3} NF==4 && (ip==$1 || ip==$2) && usr==$3 {print $
-4}' | head -n 1 )
+' | sed '/^[[:space:]]*#/d; /^[[:space:]]*$/d; ' | awk -vip="$1" -vusr="$2" 'NF==3 && ip==$1 && usr==$2 {print $3} NF==4 && (ip==$1 || ip==$2) && usr==$3 {print $4}' | head -n 1 )
 
 if [[ $pw == "" ]];then
   if [[ "$2" == "root" ]]; then
