@@ -29,7 +29,7 @@ fi
 
 short_opts="hicp:l"
 long_opts="help,install,clean,part:,list-part,reinstall"
-TEMP=$(getopt -n $PROGRAM_NAME -o "$short_opts" --long "$long_opts" -- "$@")
+TEMP=$(getopt -n $PROGRAM_NAME -o "$short_opts" -l "$long_opts" -- "$@")
 
 if [[ $? -ne 0 ]];then
     error "Error parsing arguments. Try $PROGRAM_NAME --help"

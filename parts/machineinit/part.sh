@@ -30,17 +30,24 @@ function getostype
     elif [[ $osstr =~ "ubuntu" ]];then
         echo ubuntu
     else
-        echo unknow
+        echo unknow os
     fi
 }
 
 function _install
 {
+    steps=(
+        mymail
+        preinstall
+        selinux
+    )
     ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
-            # do something
-            error "$ostype not support now"
+            for step in ${steps[@]};do
+                chmod +x steps/${step}.sh
+                bash steps/${step}.sh $ostype
+            done
         ;;
         *)
             error "$ostype not support now"
@@ -54,7 +61,7 @@ function _clean
     case $ostype in
         centos|pve|ubuntu)
             # do something
-            error "$ostype not support now"
+            normalp "$partname not support clean"
         ;;
         *)
             error "$ostype not support now"

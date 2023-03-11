@@ -30,7 +30,7 @@ function getostype
     elif [[ $osstr =~ "ubuntu" ]];then
         echo ubuntu
     else
-        echo unknow
+        echo unknow os
     fi
 }
 
