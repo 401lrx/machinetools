@@ -11,12 +11,12 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 
 def usage():
-        print "mysendmail send [params]:"
-        print "    -h --help: 帮助信息"
-        print "    -t --to: 接受邮箱"
-        print "    -m --message: 设置正文"
-        print "    -s --subject: 设置主题"
-        print "    -f --file: 附件，绝对路径"
+        print ("mysendmail send [params]:")
+        print ("    -h --help: 帮助信息")
+        print ("    -t --to: 接受邮箱")
+        print ("    -m --message: 设置正文")
+        print ("    -s --subject: 设置主题")
+        print ("    -f --file: 附件，绝对路径")
 
 # 基础设置
 mail_host="smtp.qq.com"  #设置服务器
@@ -73,6 +73,6 @@ try:
         smtpObj.connect(mail_host, 25)    # 25 为 SMTP 端口号
         smtpObj.login(mail_user,mail_pass)  
         smtpObj.sendmail(sender, receivers, msgRoot.as_string())
-        print "Send OK"
+        print ("Send OK")
 except smtplib.SMTPException:
-        print "Error: sendmail"
+        print ("Error: sendmail")

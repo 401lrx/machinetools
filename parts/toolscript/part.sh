@@ -43,7 +43,7 @@ function _install
             mkdir -p /work/toolscript
             cp -R scripts/* /work/toolscript/
             chmod 777 /work
-            chmod -R 777 /work/toolscript
+            chmod -R 755 /work/toolscript
         ;;
         *)
             error "$ostype not support now"
