@@ -79,7 +79,7 @@ op=$1
 case $op in
     install)
         while true; do
-            read -p "Do you wish to install ${packname}(yes/no)?" yn
+            read -p "Do you wish to install ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _install; break;;
                 [Nn]* ) exit 1;;
@@ -89,7 +89,7 @@ case $op in
     ;;
     clean)
         while true; do
-            read -p "Do you wish to clean ${packname}(yes/no)?" yn
+            read -p "Do you wish to clean ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _clean; break;;
                 [Nn]* ) exit 1;;
