@@ -1,12 +1,6 @@
 #!/bin/bash
 cd `dirname $0`
-
-RED="\\E[5;33;41m[ERROR]"
-GREEN="\\E[1;32m"
-RESET="\\E[0m"
-success() { [ $# -ge 1 ] && echo -e $GREEN"$@" $RESET; }
-error() { [ $# -ge 1 ] && echo -e $RED"$@" $RESET; }
-normalp() { [ $# -ge 1 ] && echo -e $RESET"$@"; }
+source ../partfunc.sh
 
 partname=machineinit
 
@@ -17,21 +11,6 @@ cur part: $partname
 usage: $0 op
     op [install|clean|help]
 EOF
-}
-
-function getostype
-{
-    osstr=`uname -a`
-    osstr=${osstr,,}
-    if [[ $osstr =~ "centos" ]];then
-        echo centos
-    elif [[ $osstr =~ "pve" ]];then
-        echo pve
-    elif [[ $osstr =~ "ubuntu" ]];then
-        echo ubuntu
-    else
-        echo unknow os
-    fi
 }
 
 function _install
