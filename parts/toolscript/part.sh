@@ -1,6 +1,6 @@
 #!/bin/bash
 cd `dirname $0`
-source ../partfunction.sh
+source ../partfunc.sh
 
 partname=toolscript
 
