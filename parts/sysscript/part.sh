@@ -42,7 +42,7 @@ case "\$op" in
 esac
 EOFMYSTARTSTOP
 		chkconfig --add $mystfile
-		chkconfig $mystfile on
+		chkconfig $(basename ${mystfile}) on
         ;;
         pve|ubuntu)
             error "$ostype not support mystartstop script now"
