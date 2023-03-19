@@ -2,7 +2,7 @@
 
 allparts=(
 machineinit
-#controluser
+controluser
 sysscript
 toolscript
 )
