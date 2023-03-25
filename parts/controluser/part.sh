@@ -35,6 +35,11 @@ function create_user
 function createcctool
 {
     user=$2
+    checkuser=`cut -d: -f1 /etc/passwd | grep -e "^$user$"`
+    if [[ "x${checkuser}" == "x" ]];then
+        error "User $user not exists, cant create cctool"
+        return
+    fi
 
     # create /work/config
     work_cfg=/work/config
