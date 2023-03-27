@@ -64,8 +64,9 @@ function createcctool
     # edit user bashrc
     echo '
 #config toolsfunc
-if [ -f ~/toolsfunc/toolsfunc.sh ];then
-        source ~/toolsfunc/toolsfunc.sh
+toolfile=/work/config/toolsfunc/toolsfunc.sh
+if [ -f ${toolfile} ];then
+        source ${toolfile}
         select_env home
 fi' >> /home/${user}/.bashrc
 chown ${user}:${user} /home/${user}/.bashrc
