@@ -34,18 +34,17 @@ function showip()
     fi
 
     local ips=$(ip -4 addr | grep -oP '(?<=inet\s)\d+(\.\d+){3}'|grep -v 127.0.0.1)
+    local showip=""
     if [[ $1 == "in" ]]; then
-        echo "$ips" | awk -F. '$1==10 || ($1==192 && $2==168) || ($1==172 && $2>=16 && $2<=31){print}'
-    elif [[ $1 == "out" ]]; then
-        local outip=$(echo "$ips" | awk -F. '!($1==10 || ($1==192 && $2==168) || ($1==172 && $2>=16 && $2<=31)){print}')
-        if [ -z "$outip" ];then
-                curl ipecho.net/plain
-        else
-                echo $outip
-        fi
-    else
-        echo "$ips"
+        showip=$(echo "$ips" | awk -F. '$1==10 || ($1==192 && $2==168) || ($1==172 && $2>=16 && $2<=31){print}')
     fi
+    if [[ $1 == "out" || "x${showip}" == "x" ]]; then
+        showip=$(echo "$ips" | awk -F. '!($1==10 || ($1==192 && $2==168) || ($1==172 && $2>=16 && $2<=31)){print}' )
+        if [ -z "$showip" ];then
+            showip=$(curl ipecho.net/plain)
+        fi
+    fi
+    echo $showip | awk '{print $1}'
 }
 
 case $(whoami) in
