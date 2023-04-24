@@ -1,0 +1,20 @@
+version: "3.0"
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:linux-amd64-2.18.1
+    ports:
+      - "9000:9000"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /work/app/portainer:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Asia/Shanghai"

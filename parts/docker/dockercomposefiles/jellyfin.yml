@@ -1,0 +1,21 @@
+version: "3.0"
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin:10.8.8-amd64
+    ports:
+      - "8096:8096"
+    restart: unless-stopped
+    volumes:
+      - /work/app/jellyfin/cache:/cache
+      - /work/app/jellyfin/config:/config
+      - /work/app/jellyfin/media:/media
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Asia/Shanghai"

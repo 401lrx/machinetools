@@ -1,0 +1,21 @@
+version: "3.0"
+services:
+  plex:
+    container_name: plex
+    image: linuxserver/plex:amd64-1.30.2
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /work/app/plex/config:/config
+      - /work/app/plex/media:/media
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Asia/Shanghai"
+      VERSION: "docker"
+      PLEX_CLAIM: "claim-xxx"

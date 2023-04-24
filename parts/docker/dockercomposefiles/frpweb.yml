@@ -1,0 +1,17 @@
+version: "3.0"
+services:
+  frpweb:
+    container_name: frpweb
+    image: snowdreamtech/frpc:0.48.0
+    restart: unless-stopped
+    volumes:
+      - /work/app/frp/web/frpc.ini:/etc/frp/frpc.ini
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Asia/Shanghai"
