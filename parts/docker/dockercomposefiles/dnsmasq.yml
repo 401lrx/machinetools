@@ -1,0 +1,22 @@
+version: "3.0"
+services:
+  dnsmasq:
+    container_name: dnsmasq
+    image: jpillora/dnsmasq
+    restart: unless-stopped
+    ports:
+      - "53:53/udp"
+      - "8080:8080"
+    volumes:
+      - /work/app/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf
+      - /work/app/dnsmasq/resolv.conf:/etc/resolv.conf
+      - /work/app/dnsmasq/dnsmasq.hosts:/etc/dnsmasq.hosts
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
+    environment:
+      TZ: "Asia/Shanghai"
+      HTTP_USER: "admin"
+      HTTP_PASS: "password"

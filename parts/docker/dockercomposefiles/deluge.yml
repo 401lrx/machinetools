@@ -1,0 +1,25 @@
+version: "3.0"
+services:
+  deluge:
+    container_name: deluge
+    image: linuxserver/deluge:amd64-2.0.5
+    ports:
+      - "8112:8112"
+      - "6881:6881"
+      - "6881:6881/udp"
+      - "6882:6882"
+      - "6882:6882/udp"
+    restart: unless-stopped
+    volumes:
+      - /work/app/deluge/config:/config
+      - /work/app/deluge/downloads:/downloads
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Asia/Shanghai"
+      DELUGE_LOGLEVEL: "error"
