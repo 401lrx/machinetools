@@ -3,6 +3,8 @@ cd `dirname $0`
 source ../partfunc.sh
 
 partname=toolscript
+tools_path=tools
+toolscript_path=$tools_path/script
 
 function usage
 {
@@ -18,11 +20,11 @@ function _install
     ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
-            # install /work/toolscript
-            mkdir -p /work/toolscript
-            cp -R scripts/* /work/toolscript/
-            chmod 777 /work
-            chmod -R 755 /work/toolscript
+            # install prefix/tools/script
+            createPath $tools_path 777
+            createPath $toolscript_path 755
+            cp -R scripts/* $MACHINE_INIT_PREFIX/$toolscript_path/
+            chmod -R 755 $MACHINE_INIT_PREFIX/$toolscript_path
         ;;
         *)
             error "$ostype not support now"
@@ -35,7 +37,7 @@ function _clean
     ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
-            rm -rf /work/toolscript
+            rm -rf $MACHINE_INIT_PREFIX/$toolscript_path
         ;;
         *)
             error "$ostype not support now"

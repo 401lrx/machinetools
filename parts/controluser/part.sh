@@ -3,6 +3,8 @@ cd `dirname $0`
 source ../partfunc.sh
 
 partname=controluser
+tools_path=tools
+mygotools_path=$tools_path/mygotools
 
 function usage
 {
@@ -41,30 +43,17 @@ function createcctool
         return
     fi
 
-    # create /work/config
-    work_cfg=/work/config
-    tools_cfg=${work_cfg}/toolsfunc
-    if [ ! -d "${tools_cfg}" ];then
-        mkdir -p ${tools_cfg}
-        chmod 777 /work
-        chmod 777 ${work_cfg}
+    # create prefix/tools/mygotools
+    createPath $tools_path 777
+    createPath $mygotools_path 755
+    yes | cp -R tools/* $MACHINE_INIT_PREFIX/$mygotools_path/
+    chmod -R 755 $MACHINE_INIT_PREFIX/$mygotools_path
+    success "toolsfunc config init done!!!"
 
-        # copy files
-        cp -R tools/* ${tools_cfg}/
-        chmod -R 755 ${tools_cfg}
-
-        success "toolsfunc config init done!!!"
-    else
-        normalp "toolsfunc has been exists."
-    fi  
-
-    # create user toolsfunc
-    ln -s /work/config/toolsfunc /home/${user}/toolsfunc
-
-    # edit user bashrc
+    # edit user bashrc, add env
     echo '
-#config toolsfunc
-toolfile=/work/config/toolsfunc/toolsfunc.sh
+#config mygotools
+toolfile='${MACHINE_INIT_PREFIX}/${mygotools_path}'/toolsfunc.sh
 if [ -f ${toolfile} ];then
         source ${toolfile}
         select_env home
