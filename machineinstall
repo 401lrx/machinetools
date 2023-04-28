@@ -39,7 +39,7 @@ TEMP=$(getopt -n $PROGRAM_NAME -o "$short_opts" -l "$long_opts" -- "$@") || \
 
 PART="all"
 EXE=""
-PREFIX="/work"
+PREFIX=$default_install_path
 
 eval set -- "$TEMP"
 while true; do

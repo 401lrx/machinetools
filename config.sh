@@ -6,3 +6,5 @@ controluser
 sysscript
 toolscript
 )
+
+default_install_path=/work
