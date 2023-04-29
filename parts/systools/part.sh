@@ -2,9 +2,9 @@
 cd `dirname $0`
 source ../partfunc.sh
 
-partname=sysscript
-sys_path=sys
-systools_path=$sys_path/tools
+partname=systools
+tools_path=tools
+install_path=$tools_path/systools
 
 function usage
 {
@@ -36,10 +36,10 @@ op=\$1
 
 case "\$op" in
     "start" )
-        bash $MACHINE_INIT_PREFIX/$systools_path/mystart.sh
+        bash $MACHINE_INIT_PREFIX/$install_path/mystart.sh
         ;;
     "stop" )
-        bash $MACHINE_INIT_PREFIX/$systools_path/mystop.sh
+        bash $MACHINE_INIT_PREFIX/$install_path/mystop.sh
         ;;
 esac
 EOFMYSTARTSTOP
@@ -52,10 +52,10 @@ EOFMYSTARTSTOP
     esac
 
     # install prefix/sys/tools
-    createPath $sys_path 700
-    createPath $systools_path 700
-    yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/systools/* $MACHINE_INIT_PREFIX/$systools_path/
-    chmod -R 700 $MACHINE_INIT_PREFIX/$systools_path
+    createPath $tools_path 777
+    createPath $install_path 700
+    yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/systools/* $MACHINE_INIT_PREFIX/$install_path/
+    chmod -R 700 $MACHINE_INIT_PREFIX/$install_path
 }
 
 function _clean
@@ -73,7 +73,7 @@ function _clean
     esac
 
     # delete prefix/sys/tools
-    rm -rf $MACHINE_INIT_PREFIX/$systools_path
+    rm -rf $MACHINE_INIT_PREFIX/$install_path
 }
 
 if [[ $# -lt 1 ]];then

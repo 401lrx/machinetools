@@ -2,9 +2,9 @@
 
 allparts=(
 machineinit
-controluser
-sysscript
-toolscript
+usertools
+systools
+publictools
 )
 
 install_path=/work

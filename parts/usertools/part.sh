@@ -2,9 +2,9 @@
 cd `dirname $0`
 source ../partfunc.sh
 
-partname=controluser
+partname=usertools
 tools_path=tools
-mygotools_path=$tools_path/mygotools
+install_path=$tools_path/usertools
 
 function usage
 {
@@ -45,15 +45,15 @@ function createcctool
 
     # create prefix/tools/mygotools
     createPath $tools_path 777
-    createPath $mygotools_path 755
-    yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/mygotools/* $MACHINE_INIT_PREFIX/$mygotools_path/
-    chmod -R 755 $MACHINE_INIT_PREFIX/$mygotools_path
+    createPath $install_path 755
+    yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/usertools/* $MACHINE_INIT_PREFIX/$install_path/
+    chmod -R 755 $MACHINE_INIT_PREFIX/$install_path
     success "toolsfunc config init done!!!"
 
     # edit user bashrc, add env
     echo '
 #config mygotools
-toolfile='${MACHINE_INIT_PREFIX}/${mygotools_path}'/toolsfunc.sh
+toolfile='${MACHINE_INIT_PREFIX}/${install_path}'/toolsfunc.sh
 if [ -f ${toolfile} ];then
         source ${toolfile}
         select_env home
