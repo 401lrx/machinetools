@@ -53,9 +53,9 @@ EOFMYSTARTSTOP
 
     # install prefix/sys/tools
     createPath $tools_path 777
-    createPath $install_path 700
+    createPath $install_path 755
     yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/systools/* $MACHINE_INIT_PREFIX/$install_path/
-    chmod -R 700 $MACHINE_INIT_PREFIX/$install_path
+    chmod -R 755 $MACHINE_INIT_PREFIX/$install_path
 }
 
 function _clean
