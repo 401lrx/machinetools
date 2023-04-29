@@ -7,4 +7,4 @@ sysscript
 toolscript
 )
 
-default_install_path=/work
+install_path=/work

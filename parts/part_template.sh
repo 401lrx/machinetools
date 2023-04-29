@@ -53,7 +53,7 @@ case $op in
             read -p "Do you wish to install ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _install; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done
@@ -63,7 +63,7 @@ case $op in
             read -p "Do you wish to clean ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _clean; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done

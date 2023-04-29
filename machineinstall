@@ -39,7 +39,7 @@ TEMP=$(getopt -n $PROGRAM_NAME -o "$short_opts" -l "$long_opts" -- "$@") || \
 
 PART="all"
 EXE=""
-PREFIX=$default_install_path
+PREFIX=$install_path
 
 eval set -- "$TEMP"
 while true; do
@@ -90,6 +90,7 @@ while true; do
 done
 
 export MACHINE_INIT_PREFIX=$PREFIX
+export MACHINE_INIT_WORK_DIR=`pwd`
 
 case $EXE in
     install)
@@ -110,4 +111,5 @@ case $EXE in
     ;;
 esac
 
-export MACHINE_INIT_PREFIX= 
+unset MACHINE_INIT_PREFIX
+unset MACHINE_INIT_WORK_DIR

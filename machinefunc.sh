@@ -42,11 +42,12 @@ function installParts
             normalp "Begin install ${onepart}, begin at: `date '+%Y-%m-%d %H:%M:%S'`"
             chmod +x ${controlscript}
             bash ${controlscript} install
-            if [[ $? -ne 0 ]];then
-                error "Install ${onepart} failed !!!"
-            else
+            local ret=$?
+            if [[ $ret -eq 0 ]];then
                 end_time=`date +%s`
                 success "Installation of ${onepart} completed, end at: `date '+%Y-%m-%d %H:%M:%S'`, running time: $((${end_time}-${start_time}))"
+            elif [[ $ret -ne 100 ]];then
+                error "Install ${onepart} failed !!!"
             fi
         else
             error "The action control for ${onepart} could not be found, please check file ${controlscript}"

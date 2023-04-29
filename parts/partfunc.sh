@@ -9,23 +9,37 @@ normalp() { [ $# -ge 1 ] && echo -e $RESET"$@"; }
 
 function getostype
 {
-    local osstr=`uname -a`
-    osstr=${osstr,,}
+    # get from uname -a
+    local osstr=`uname -a | tr 'A-Z' 'a-z'`
     if [[ $osstr =~ "centos" ]];then
-        echo centos
+        echo centos; return
     elif [[ $osstr =~ "pve" ]];then
-        echo pve
+        echo pve; return
     elif [[ $osstr =~ "ubuntu" ]];then
-        echo ubuntu
-    elif [ -f /etc/redhat-release ];then
-        osstr=`cat /etc/redhat-release`
-        osstr=${osstr,,}
-        if [[ $osstr =~ "centos" ]];then
-            echo centos
-        fi
-    else
-        echo unknow os
+        echo ubuntu; return
     fi
+
+    # get from /etc/redhat-release
+    if [ -f /etc/redhat-release ];then
+        osstr=`cat /etc/redhat-release | tr 'A-Z' 'a-z'`
+        if [[ $osstr =~ "centos" ]];then
+            echo centos; return
+        fi
+    fi
+
+    # get from /etc/issue
+    if [ -f /etc/issue ];then
+        osstr=`cat /etc/issue | tr 'A-Z' 'a-z'`
+        if [[ $osstr =~ "centos" ]];then
+            echo centos; return
+        elif [[ $osstr =~ "ubuntu" ]];then
+            echo ubuntu; return 
+        elif [[ $osstr =~ "pve" ]] || [[ $osstr =~ "proxmox" ]];then
+            echo pve; return
+        fi
+    fi
+
+    echo unknowos
 }
 
 function createRootDir

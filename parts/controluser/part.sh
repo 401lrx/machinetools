@@ -46,7 +46,7 @@ function createcctool
     # create prefix/tools/mygotools
     createPath $tools_path 777
     createPath $mygotools_path 755
-    yes | cp -R tools/* $MACHINE_INIT_PREFIX/$mygotools_path/
+    yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/mygotools/* $MACHINE_INIT_PREFIX/$mygotools_path/
     chmod -R 755 $MACHINE_INIT_PREFIX/$mygotools_path
     success "toolsfunc config init done!!!"
 
@@ -138,7 +138,7 @@ case $op in
             read -p "Do you wish to install ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _install; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done
@@ -148,7 +148,7 @@ case $op in
             read -p "Do you wish to clean ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _clean; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done
