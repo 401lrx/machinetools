@@ -67,19 +67,23 @@ for section in $(bash parseini.sh section $backup_conf); do
 		smb)
 			from_address=$(bash parseini.sh var $backup_conf $section "from_address")
 			from_dir=$(bash parseini.sh var $backup_conf $section "from_dir")
-			user=$(bash parseini.sh var $backup_conf $section "user")
-			passwd=$(bash parseini.sh var $backup_conf $section "passwd")
+			from_user=$(bash parseini.sh var $backup_conf $section "from_user")
+			from_passwd=$(bash parseini.sh var $backup_conf $section "from_passwd")
 			if [[ "x$from_address" == "x" ]];then
 				backuplog "backup conf error|$section|from_address|$from_address"
 				errorexit
 			fi
-			mount //$from_address/$from_dir $work_from -t cifs --options "username=$user,password=$passwd,dir_mode=0777,file_mode=0777,vers=3.0"
+			mount $from_address $work_from -t cifs --options "username=$from_user,password=$from_passwd,dir_mode=0777,file_mode=0777,vers=3.0"
 			if [ $? -ne 0 ];then
-				backuplog "mount smb error|$section|from|//$from_address/$from_dir"
+				backuplog "mount smb error|$section|from|$from_address"
 				errorexit
 			else
-				backuplog "mount smb //$from_address/$from_dir to $work_from"
-				real_from=$work_from
+				backuplog "mount smb $from_address to $work_from"
+			fi
+			real_from=$work_from/$from_dir
+			if [ ! -d $real_from ];then
+				backuplog "backup dir error|$section|from_dir|$from_dir"
+				errorexit
 			fi
 		;;
 		*)
@@ -102,7 +106,11 @@ for section in $(bash parseini.sh section $backup_conf); do
 				errorexit
 			else
 				backuplog "mount disk $to_address to $work_to"
-				real_to=$work_to/$to_dir
+			fi
+			real_to=$work_to/$to_dir
+			if [ ! -d $real_to ];then
+				backuplog "auto create to_dir $to_dir"
+				mkdir -p -m 777 $real_to
 			fi
 		;;
 		*)
@@ -116,13 +124,14 @@ for section in $(bash parseini.sh section $backup_conf); do
 	for exclude_one in $(bash parseini.sh var $backup_conf $section "exclude" | sed "s/,/ /g");do
 		exclude_cmd="$exclude_cmd --exclude '$exclude_one'"
 	done
-	backuplog $(rsync -hvaiEW --delete $exclude_cmd $real_from/ $real_to)
+	backuplog "rsync -hvaiEW --delete $exclude_cmd $real_from/ $real_to"
+	backuplog "$(rsync -hvaiEW --delete $exclude_cmd $real_from/ $real_to 2>&1)"
 
 	# 卸载目录
 	case $from_type in
 		smb)
 			umount $work_from
-			backuplog "umount smb //$from_address/$from_dir"
+			backuplog "umount smb $from_address"
 		;;
 	esac
 	case $to_type in

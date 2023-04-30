@@ -132,7 +132,7 @@ case $op in
             get_section_var $file $3 $4
         fi
     ;;
-    help)
+    *)
         usage
     ;;
 esac	
