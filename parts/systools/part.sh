@@ -5,6 +5,8 @@ source ../partfunc.sh
 partname=systools
 tools_path=tools
 install_path=$tools_path/systools
+config_path=config
+config_install_path=$config_path/template
 
 function usage
 {
@@ -51,11 +53,17 @@ EOFMYSTARTSTOP
         ;;
     esac
 
-    # install prefix/sys/tools
+    # install prefix/tools/systools
     createPath $tools_path 777
     createPath $install_path 755
     yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/systools/* $MACHINE_INIT_PREFIX/$install_path/
     chmod -R 755 $MACHINE_INIT_PREFIX/$install_path
+
+    # install prefix/config/template
+    createPath $config_path 777
+    createPath $config_install_path 755
+    yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/configtemplate/* $MACHINE_INIT_PREFIX/$config_install_path/
+    chmod -R 644 $MACHINE_INIT_PREFIX/$config_install_path
 }
 
 function _clean
@@ -72,7 +80,7 @@ function _clean
         ;;
     esac
 
-    # delete prefix/sys/tools
+    # delete prefix/tools/systools
     rm -rf $MACHINE_INIT_PREFIX/$install_path
 }
 
