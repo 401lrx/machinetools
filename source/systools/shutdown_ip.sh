@@ -1,6 +1,6 @@
 #! /usr/bin/bash
 
-if [ $# -lt 4 ];then
+if [ $# -lt 3 ];then
 	echo "$0 host usr password"
 	echo "Example: $0 192.168.1.1 test testpass"
 	exit 1

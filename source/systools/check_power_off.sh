@@ -20,7 +20,7 @@ shutdown_per=$(bash parseini.sh var $conf "common" "shutdown_per")
 if [[ "x$shutdown_per" == "x" ]];then shutdown_per=20; fi
 
 if (( $left_bat_per < $shutdown_per )); then
-    for section in $(bash parseini.sh section $backup_conf); do
+    for section in $(bash parseini.sh section $conf); do
     	if [[ "$section" == "common" ]];then continue; fi
         ip=$(bash parseini.sh var $conf $section "ip")
         user=$(bash parseini.sh var $conf $section "user")
