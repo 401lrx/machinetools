@@ -122,7 +122,7 @@ for section in $(bash parseini.sh section $backup_conf); do
 	# 开始备份
 	exclude_cmd=""
 	for exclude_one in $(bash parseini.sh var $backup_conf $section "exclude" | sed "s/,/ /g");do
-		exclude_cmd="$exclude_cmd --exclude '$exclude_one'"
+		exclude_cmd="$exclude_cmd --exclude $exclude_one"
 	done
 	backuplog "rsync -hvaiEW --delete $exclude_cmd $real_from/ $real_to"
 	backuplog "$(rsync -hvaiEW --delete $exclude_cmd $real_from/ $real_to 2>&1)"
