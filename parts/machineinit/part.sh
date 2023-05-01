@@ -19,7 +19,7 @@ function _install
         mymail
         preinstall
         selinux
-        sshconfig
+        #sshconfig
     )
     ostype=$(getostype)
     case $ostype in
