@@ -52,7 +52,7 @@ function createcctool
 
     # edit user bashrc, add env
     echo '
-#config mygotools
+#config usertools
 toolfile='${MACHINE_INIT_PREFIX}/${install_path}'/toolsfunc.sh
 if [ -f ${toolfile} ];then
         source ${toolfile}

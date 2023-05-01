@@ -20,9 +20,9 @@ def usage():
 
 # 基础设置
 mail_host="smtp.qq.com"  #设置服务器
-mail_user="1716318413@qq.com"    #用户名
-mail_pass="xqjiveulaifschbj"   #口令 
-sender = '1716318413@qq.com'
+mail_user="m"    #用户名
+mail_pass=""   #口令 
+sender = ''
 
 # 解析参数
 mail_file_path=""
