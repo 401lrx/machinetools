@@ -22,31 +22,15 @@
         --setcmd export BIN_DIR=/data/app/IDLE
 
 # 使用规范
-#
-#
-#
-#
-#
-#
-#
-#
-#
-
-
+# ToDo
 
 #子参数
 #	setip		ip列表
 #	setenv		环境
 #	setpath		路径
 #	setcmd		命令
-#	sshuser 	ssh用户，仅mygo生效
-#	sshoption	ssh参数，仅mygo生效
 #	setsshusr	ssh用户，putfile,shellex,mygo都生效
 #	setsshport	ssh端口，putfile,shellex,mygo都生效
-#
-#
-#
-#
 
 # 其他环境参数配置
 lrx
