@@ -1,25 +1,16 @@
 #!/bin/bash
-# this script in preix/tools/usertools
-# config file in prefix/config
 cd `dirname $0`
 
 if [ $# -lt 2 ];then
 	exit 1
 fi
 
-#pw_file=../../config/toolssshpw.txt
-#if [ ! -f $pw_file ];then
-#	exit 1
-#fi
-
 pw=$(echo "
+# 192.168.1.1 usr pw
+# 192.168.* usr pw
+# .* usr pw
 
 " | sed '/^[[:space:]]*#/d; /^[[:space:]]*$/d; ' | awk -vip="$1" -vusr="$2" '
-NF==2 {
-	if (usr==$1) {
-		print $2
-	}
-}
 NF==3 {
 	pat="^("$1")$"
 	if (match(ip, pat) && usr==$2) {

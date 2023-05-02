@@ -56,20 +56,22 @@ function createcctool
     if [ ! -f $MACHINE_INIT_PREFIX/$config_path/toolsconfig.txt ];then
         yes 2>/dev/null | cp -f $MACHINE_INIT_WORK_DIR/source/usertools/toolsconfig.txt $MACHINE_INIT_PREFIX/$config_path/
     fi
-    if [ ! -f $MACHINE_INIT_PREFIX/$config_path/toolssshpw.txt ];then
-        echo "# ip usr pw or usr pw" > $MACHINE_INIT_PREFIX/$config_path/toolssshpw.txt
+    if [ ! -f $MACHINE_INIT_PREFIX/$config_path/ssh_getpwd.sh ];then
+        yes 2>/dev/null | cp -f $MACHINE_INIT_WORK_DIR/source/usertools/ssh_getpwd.sh $MACHINE_INIT_PREFIX/$config_path/
     fi
+    chmod +x $MACHINE_INIT_PREFIX/$config_path/ssh_getpwd.sh
 
     # edit user bashrc, add env
     # delete old
     sed -i '/^# config usertools begin/,/^# config usertools end/d' /home/${user}/.bashrc
     # create new
-    echo '
-# config usertools begin
+    echo '# config usertools begin
 toolfile='${MACHINE_INIT_PREFIX}/${install_path}'/toolsfunc.sh
 toolconfig='${MACHINE_INIT_PREFIX}/${config_path}/toolsconfig.txt'
+sshconfig='${MACHINE_INIT_PREFIX}/${config_path}/ssh_getpwd.sh'
 if [ -f ${toolfile} ];then
         export TOOLS_CONFIG=${toolconfig}
+        export SSH_GETPWD=${sshconfig}
         source ${toolfile}
         select_env home
 fi
