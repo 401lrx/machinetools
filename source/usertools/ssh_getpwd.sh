@@ -7,12 +7,14 @@ if [ $# -lt 2 ];then
 	exit 1
 fi
 
-pw_file=../../config/toolssshpw.txt
-if [ ! -f $pw_file ];then
-	exit 1
-fi
+#pw_file=../../config/toolssshpw.txt
+#if [ ! -f $pw_file ];then
+#	exit 1
+#fi
 
-pw=$(cat $pw_file | sed '/^[[:space:]]*#/d; /^[[:space:]]*$/d; ' | awk -vip="$1" -vusr="$2" '
+pw=$(echo "
+
+" | sed '/^[[:space:]]*#/d; /^[[:space:]]*$/d; ' | awk -vip="$1" -vusr="$2" '
 NF==2 {
 	if (usr==$1) {
 		print $2
