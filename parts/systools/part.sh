@@ -20,10 +20,10 @@ EOF
 function _install
 {
     # install init.d
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos)
-            mystfile=/etc/rc.d/init.d/mystartstop.sh
+            local mystfile=/etc/rc.d/init.d/mystartstop.sh
             mkdir -p "$(dirname "$mystfile")"
             touch "$mystfile"
             chmod 755 $mystfile
@@ -69,10 +69,10 @@ EOFMYSTARTSTOP
 function _clean
 {
     # clean init.d
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos)
-            mystfile=/etc/rc.d/init.d/mystartstop.sh
+            local mystfile=/etc/rc.d/init.d/mystartstop.sh
             rm -rf $mystfile
         ;;
         pve|ubuntu)

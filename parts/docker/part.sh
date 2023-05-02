@@ -15,7 +15,7 @@ EOF
 
 function _install
 {
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             #replace here ToDo something
@@ -29,7 +29,7 @@ function _install
 
 function _clean
 {
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             #replace here ToDo something

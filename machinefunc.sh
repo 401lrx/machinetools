@@ -19,11 +19,12 @@ function listAllParts
 
 function installParts
 {
-    PART=all
+    local PART=all
     if [[ $# -ge 1 ]];then
         PART=$1
     fi
 
+    local installparts=""
     if [[ "$PART" == "all" ]];then
         normalp "Install all part"
         installparts=("${allparts[@]}")
@@ -32,19 +33,19 @@ function installParts
         installparts=($PART)
     fi
 
-    total_start_time=`date +%s`
+    local total_start_time=`date +%s`
     normalp "Begin install ... Now: `date '+%Y-%m-%d %H:%M:%S'`"
 
     for onepart in ${installparts[@]};do
-        controlscript=parts/${onepart}/part.sh
+        local controlscript=parts/${onepart}/part.sh
         if [ -f ${controlscript} ];then
-            start_time=`date +%s`
+            local start_time=`date +%s`
             normalp "Begin install ${onepart}, begin at: `date '+%Y-%m-%d %H:%M:%S'`"
             chmod +x ${controlscript}
             bash ${controlscript} install
             local ret=$?
             if [[ $ret -eq 0 ]];then
-                end_time=`date +%s`
+                local end_time=`date +%s`
                 success "Installation of ${onepart} completed, end at: `date '+%Y-%m-%d %H:%M:%S'`, running time: $((${end_time}-${start_time}))"
             elif [[ $ret -ne 100 ]];then
                 error "Install ${onepart} failed !!!"
@@ -54,17 +55,18 @@ function installParts
         fi
     done
 
-    total_end_time=`date +%s`
+    local total_end_time=`date +%s`
     normalp "End install ... Now: `date '+%Y-%m-%d %H:%M:%S'`, total running time: $((${total_end_time}-${total_start_time}))"
 }
 
 function cleanParts
 {
-    PART=all
+    local PART=all
     if [[ $# -ge 1 ]];then
         PART=$1
     fi
 
+    local cleanparts=""
     if [[ "$PART" == "all" ]];then
         normalp "Clean all part"
         cleanparts=("${allparts[@]}")
@@ -73,11 +75,11 @@ function cleanParts
         cleanparts=($PART)
     fi
 
-    total_start_time=`date +%s`
+    local total_start_time=`date +%s`
     normalp "Begin clean ..."
 
     for onepart in ${cleanparts[@]};do
-        controlscript=parts/${onepart}/part.sh
+        local controlscript=parts/${onepart}/part.sh
         if [ -f ${controlscript} ];then
             chmod +x ${controlscript}
             bash ${controlscript} clean
@@ -91,6 +93,6 @@ function cleanParts
         fi
     done
 
-    total_end_time=`date +%s`
+    local total_end_time=`date +%s`
     normalp "End clean ... total running time: $((${total_end_time}-${total_start_time}))"
 }

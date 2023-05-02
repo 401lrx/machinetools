@@ -15,13 +15,13 @@ EOF
 
 function _install
 {
-    steps=(
+    local steps=(
         mymail
         preinstall
         selinux
         #sshconfig
     )
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             for step in ${steps[@]};do
@@ -37,7 +37,7 @@ function _install
 
 function _clean
 {
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             # do something
