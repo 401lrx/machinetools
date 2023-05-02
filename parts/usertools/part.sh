@@ -61,15 +61,19 @@ function createcctool
     fi
 
     # edit user bashrc, add env
+    # delete old
+    sed -i '/^# config usertools begin/,/^# config usertools end/d' /home/${user}/.bashrc
+    # create new
     echo '
-#config usertools
+# config usertools begin
 toolfile='${MACHINE_INIT_PREFIX}/${install_path}'/toolsfunc.sh
 toolconfig='${MACHINE_INIT_PREFIX}/${config_path}/toolsconfig.txt'
 if [ -f ${toolfile} ];then
         export TOOLS_CONFIG=${toolconfig}
         source ${toolfile}
         select_env home
-fi' >> /home/${user}/.bashrc
+fi
+# config usertools end' >> /home/${user}/.bashrc
 chown ${user}:${user} /home/${user}/.bashrc
 
     # pve6 use bash_profile
