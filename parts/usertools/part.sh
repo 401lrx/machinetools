@@ -5,6 +5,7 @@ source ../partfunc.sh
 partname=usertools
 tools_path=tools
 install_path=$tools_path/usertools
+config_path=config
 
 function usage
 {
@@ -48,13 +49,24 @@ function createcctool
     createPath $install_path 755
     yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/usertools/* $MACHINE_INIT_PREFIX/$install_path/
     chmod -R 755 $MACHINE_INIT_PREFIX/$install_path
+    createPath $config_path 777
     success "toolsfunc config init done!!!"
+
+    # create default in prefix/config
+    if [ ! -f $MACHINE_INIT_PREFIX/$config_path/toolsconfig.txt ];then
+        yes 2>/dev/null | cp -f $MACHINE_INIT_WORK_DIR/source/usertools/toolsconfig.txt $MACHINE_INIT_PREFIX/$config_path/
+    fi
+    if [ ! -f $MACHINE_INIT_PREFIX/$config_path/toolssshpw.txt ];then
+        echo "# ip usr pw or usr pw" > $MACHINE_INIT_PREFIX/$config_path/toolssshpw.txt
+    fi
 
     # edit user bashrc, add env
     echo '
 #config usertools
 toolfile='${MACHINE_INIT_PREFIX}/${install_path}'/toolsfunc.sh
+toolconfig='${MACHINE_INIT_PREFIX}/${config_path}/toolsconfig.txt'
 if [ -f ${toolfile} ];then
+        export TOOLS_CONFIG=${toolconfig}
         source ${toolfile}
         select_env home
 fi' >> /home/${user}/.bashrc
