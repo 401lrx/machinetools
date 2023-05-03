@@ -1,10 +1,12 @@
 #!/bin/bash
 
-RED="\\E[5;33;41m[ERROR]"
+RED="\\E[5;33;41m"
 GREEN="\\E[1;32m"
+YELLOW="\\E[1;33m"
 RESET="\\E[0m"
 success() { [ $# -ge 1 ] && echo -e $GREEN"$@" $RESET; }
-error() { [ $# -ge 1 ] && echo -e $RED"$@" $RESET; }
+error() { [ $# -ge 1 ] && echo -e $RED"[ERROR] ""$@" $RESET; }
+warning() { [ $# -ge 1 ] && echo -e $YELLOW"[WARNING] ""$@" $RESET; }
 normalp() { [ $# -ge 1 ] && echo -e $RESET"$@"; }
 
 function getostype

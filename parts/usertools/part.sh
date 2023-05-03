@@ -44,31 +44,35 @@ function createcctool
 		return
 	fi
 
-	# create prefix/tools/mygotools
+	# create prefix/tools/usertools
 	createPath $tools_path 777
 	createPath $install_path 755
 	yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/usertools/* $MACHINE_INIT_PREFIX/$install_path/
 	chmod -R 755 $MACHINE_INIT_PREFIX/$install_path
 	createPath $config_path 777
-	success "toolsfunc config init done!!!"
+	normalp "$MACHINE_INIT_PREFIX/$install_path has been installed"
 
 	# create default in prefix/config
-	if [ ! -f $MACHINE_INIT_PREFIX/$config_path/toolsconfig.txt ];then
+	toolsconfig_file=$MACHINE_INIT_PREFIX/$config_path/toolsconfig.txt
+	if [ ! -f $toolsconfig_file ];then
 		yes 2>/dev/null | cp -f $MACHINE_INIT_WORK_DIR/source/usertools/toolsconfig.txt $MACHINE_INIT_PREFIX/$config_path/
+		normalp "$toolsconfig_file has been automatically generated"
 	fi
-	if [ ! -f $MACHINE_INIT_PREFIX/$config_path/ssh_getpwd.sh ];then
+	sshconfig_file=$MACHINE_INIT_PREFIX/$config_path/ssh_getpwd.sh
+	if [ ! -f $sshconfig_file ];then
 		yes 2>/dev/null | cp -f $MACHINE_INIT_WORK_DIR/source/usertools/ssh_getpwd.sh $MACHINE_INIT_PREFIX/$config_path/
+		normalp "$sshconfig_file has been automatically generated"
 	fi
-	chmod +x $MACHINE_INIT_PREFIX/$config_path/ssh_getpwd.sh
+	chmod +x $sshconfig_file
 
 	# edit user bashrc, add env
 	# delete old
 	sed -i '/^# config usertools begin/,/^# config usertools end/d' /home/${user}/.bashrc
 	# create new
 	echo '# config usertools begin
-toolfile='${MACHINE_INIT_PREFIX}/${install_path}'/toolsfunc.sh
-toolconfig='${MACHINE_INIT_PREFIX}/${config_path}/toolsconfig.txt'
-sshconfig='${MACHINE_INIT_PREFIX}/${config_path}/ssh_getpwd.sh'
+toolfile='${MACHINE_INIT_PREFIX}/${install_path}/toolsfunc.sh'
+toolconfig='${toolsconfig_file}'
+sshconfig='${sshconfig_file}'
 if [ -f ${toolfile} ];then
 		export TOOLS_CONFIG=${toolconfig}
 		export SSH_GETPWD=${sshconfig}
@@ -77,6 +81,7 @@ if [ -f ${toolfile} ];then
 fi
 # config usertools end' >> /home/${user}/.bashrc
 chown ${user}:${user} /home/${user}/.bashrc
+	normalp "env config has been added to /home/${user}/.bashrc"
 
 	# pve6 use bash_profile
 	case $1 in
@@ -142,11 +147,11 @@ function _clean
 	fi
 
 	# delete prefix/tools/usertools
-	normalp "clean old usertools ..."
 	rm -rf $MACHINE_INIT_PREFIX/$install_path
+	normalp "$MACHINE_INIT_PREFIX/$install_path has been deleted"
 	# clean bashrc
-	normalp "clean /home/${user}/.bashrc ..."
 	sed -i '/^# config usertools begin/,/^# config usertools end/d' /home/${user}/.bashrc
+	normalp "env conf in /home/${user}/.bashrc has been deleted"
 }
 
 if [[ $# -lt 1 ]];then

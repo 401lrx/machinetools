@@ -47,9 +47,10 @@ esac
 EOFMYSTARTSTOP
 		chkconfig --add $mystfile
 		chkconfig $(basename ${mystfile}) on
+        normalp "$mystfile has been installed"
         ;;
         pve|ubuntu)
-            error "$ostype not support mystartstop script now"
+            warning "$ostype not support mystartstop script now"
         ;;
     esac
 
@@ -58,12 +59,14 @@ EOFMYSTARTSTOP
     createPath $install_path 755
     yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/systools/* $MACHINE_INIT_PREFIX/$install_path/
     chmod -R 755 $MACHINE_INIT_PREFIX/$install_path
+    normalp "$MACHINE_INIT_PREFIX/$install_path has been installed"
 
     # install prefix/config/template
     createPath $config_path 777
     createPath $config_install_path 755
     yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/configtemplate/* $MACHINE_INIT_PREFIX/$config_install_path/
     chmod -R 644 $MACHINE_INIT_PREFIX/$config_install_path/*
+    normalp "$MACHINE_INIT_PREFIX/$config_install_path has been installed"
 }
 
 function _clean
@@ -74,14 +77,16 @@ function _clean
         centos)
             local mystfile=/etc/rc.d/init.d/mystartstop.sh
             rm -rf $mystfile
+            normalp "$mystfile has been deleted"
         ;;
         pve|ubuntu)
-            error "$ostype not support mystartstop script now"
+            normalp "$ostype do not support mystartstop script and delete nothing "
         ;;
     esac
 
     # delete prefix/tools/systools
     rm -rf $MACHINE_INIT_PREFIX/$install_path
+    normalp "$MACHINE_INIT_PREFIX/$install_path has been deleted"
 }
 
 if [[ $# -lt 1 ]];then
