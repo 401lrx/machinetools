@@ -27,7 +27,7 @@ log_path=$(bash parseini.sh var $backup_conf "common" "log_path")
 if [[ "x$log_path" == "x" ]]; then
 	log_path=../../log/backup_disk
 fi
-log_file=${log_path}/${backup_time}.log
+log_file=${log_path}/backup.log
 mkdir -p -m 755 $log_path
 
 # 准备临时文件夹
