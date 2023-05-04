@@ -61,7 +61,7 @@ function get_all_section
         if [ "x" == "x${line}" ] || [[ $line =~ ^[[:alnum:]_]+\=.*$ ]]; then continue; fi
 
         echo $line | awk -F '[][]' '{print $2 }'
-    done < $1
+    done < <(sed -n '/^[[:space:]]*\[.*\]/p' $1)
 }
 
 function get_section_all_var
@@ -73,16 +73,12 @@ function get_section_all_var
         # 去除左右空格
         line=$(echo $line)
         # 跳过空行
-        if [ "x" == "x${line}" ]; then continue; fi
+        if [ -z "${line}" ]; then continue; fi
+        # 跳过段名
+        if [[ $line =~ ^\[ ]];then continue; fi
 
-        # 在段内，碰到下一个段名，返回
-        if [ $insection -eq 1 ] && [[ $line =~ ^\[[[:alnum:]]+\]$ ]]; then return; fi
-        # 不在段内，直到找到需要的段名
-        if [ $insection -eq 0 ] && [[ "$line" != "[$2]" ]]; then continue; fi
-        # 进入段内，设置flag，跳过段名行
-        if [ $insection -eq 0 ]; then insection=1; continue; fi
         echo $line | awk -F= '{print $1 " " $2}'
-    done < $1
+    done < <(sed -n '/^[[:space:]]*\['$2'\]/,/^[[:space:]]*\[.*\]/p' $1)
 }
 
 function get_section_var
@@ -96,15 +92,8 @@ function get_section_var
         # 跳过空行
         if [ "x" == "x${line}" ]; then continue; fi
 
-        # 在段内，碰到下一个段名，返回
-        if [ $insection -eq 1 ] && [[ $line =~ ^\[[[:alnum:]]+\]$ ]]; then return; fi
-        # 不在段内，直到找到需要的段名
-        if [ $insection -eq 0 ] && [[ "$line" != "[$2]" ]]; then continue; fi
-        # 进入段内，设置flag，跳过段名行
-        if [ $insection -eq 0 ]; then insection=1; continue; fi
         echo $line | awk -F= '$1=="'$3'" {print $2}'
-    done < $1
-
+    done < <(sed -n '/^[[:space:]]*\['$2'\]/,/^[[:space:]]*\[.*\]/p' $1 | grep "$3")
 }
 
 if [ $# -lt 2 ];then 
