@@ -1056,29 +1056,31 @@ function mygo()
 		user=${svr%%@*}
 		svr=${svr#*@}
 	fi
+	shift
 
+	local svr_args=("$svr" "$@")
 	if [[ $user == "" ]];then
-		user=$(get_ssh_usr $svr)
+		user=$(get_ssh_usr "${svr_args[@]}")
 	fi
 	if [[ $user == "" ]]; then
 		user=$SSH_DEFAULT_USER
 	fi
 
-	local sshport=$(get_ssh_port $svr)
+	local sshport=$(get_ssh_port "${svr_args[@]}")
 	if [[ $sshport != "" ]];then
 		 sshoption=("-p $sshport" ${sshoption[@]})
 	fi
 
-	local ips=($(getip $svr))
-	local goenv=$(getconfig_item setenv '' $svr)
+	local ips=($(getip "${svr_args[@]}"))
+	local goenv=$(getconfig_item setenv '' "${svr_args[@]}")
 	if [[ $goenv == "" ]]; then
 		goenv=$SELECTED_ENV
 	fi
 
-	local cmd="select_env $goenv; enter_machine $svr"
+	local cmd="select_env $goenv; enter_machine ${svr_args[@]}"
 
 	if [[ ${#ips[*]} -eq 0 ]]; then
-		echo "no ip available: $svr" >&2
+		echo "no ip available: ${svr_args[@]}" >&2
 		return 1
 	fi
 	if [[ ${#ips[*]} -eq 1 ]]; then
