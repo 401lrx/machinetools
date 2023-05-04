@@ -20,15 +20,16 @@ def usage():
 
 # 基础设置
 mail_host="smtp.qq.com"  #设置服务器
-mail_user="m"    #用户名
+mail_user=""   #用户名
 mail_pass=""   #口令 
-sender = ''
+
+sender = ''     # 发信人
+receivers = []  # 接收人列表
 
 # 解析参数
 mail_file_path=""
 mail_message=""
 mail_subject=""
-receivers = []  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
 
 if len(sys.argv) < 2 or sys.argv[1] != "send":
         usage()
@@ -54,18 +55,20 @@ msgRoot['From'] = Header("cc机器人", 'utf-8')
 toMember = ''.join(str(i) for i in receivers)
 msgRoot['To'] =  Header(toMember, 'utf-8')
 
-# 邮件内容
+# 邮件主题
 msgRoot['Subject'] = Header(mail_subject, 'utf-8')
-msgRoot.attach(MIMEText(mail_message, 'plain', 'utf-8'))
+
+# 文本附件
+txtatt=MIMEText(mail_message, 'plain', 'utf-8')
+msgRoot.attach(txtatt)
 
 # 文件附件
 if mail_file_path != "":
-        file_name = os.path.basename(mail_file_path)
         send_file = open(mail_file_path, "rb").read()
-        att = MIMEText(send_file, "base64", "utf-8")
-        att['Content-Type'] = 'application/octet-stream'
-        att['Content-Disposition'] = "attachment;filename=" + file_name
-        msgRoot.attach(att)
+        fileatt = MIMEText(send_file, "base64", "utf-8")
+        fileatt['Content-Type'] = 'application/octet-stream'
+        fileatt['Content-Disposition'] = "attachment;filename=" + os.path.basename(mail_file_path)
+        msgRoot.attach(fileatt)
 
 # 发送邮件
 try:
