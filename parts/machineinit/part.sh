@@ -16,7 +16,6 @@ EOF
 function _install
 {
     local steps=(
-        mymail
         preinstall
         selinux
         #sshconfig
