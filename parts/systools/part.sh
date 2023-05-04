@@ -66,6 +66,7 @@ EOFMYSTARTSTOP
     createPath $config_install_path 755
     yes 2>/dev/null | cp -Rf $MACHINE_INIT_WORK_DIR/source/configtemplate/* $MACHINE_INIT_PREFIX/$config_install_path/
     chmod -R 644 $MACHINE_INIT_PREFIX/$config_install_path/*
+    find $MACHINE_INIT_PREFIX/$config_install_path/ -type d -exec chmod +x {} \;
     normalp "$MACHINE_INIT_PREFIX/$config_install_path has been installed"
 }
 
