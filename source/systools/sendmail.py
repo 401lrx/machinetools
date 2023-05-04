@@ -1,8 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-
-import getopt
 import sys
+import argparse
 
 import smtplib
 import os
@@ -10,72 +9,62 @@ from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 
-def usage():
-        print ("mysendmail send [params]:")
-        print ("    -h --help: 帮助信息")
-        print ("    -t --to: 接受邮箱")
-        print ("    -m --message: 设置正文")
-        print ("    -s --subject: 设置主题")
-        print ("    -f --file: 附件，绝对路径")
+def get_parser():
+    parser = argparse.ArgumentParser(sys.argv[0])
+    parser.add_argument("--sender", required=True, help="The sender of email")
+    parser.add_argument("--mailhost", required=True, help="The mailing service hostname")
+    parser.add_argument("--mailuser", required=True, help="The username of mailing service")
+    parser.add_argument("--mailpass", required=True, help="The password of the user")
+    parser.add_argument("-t", "--recipient", required=True, action="append", help="The recipients og email", default=[])
+    parser.add_argument("-m", "--message", help="The message body", default="")
+    parser.add_argument("-s", "--subject", help="The subject of the email", default="")
+    parser.add_argument("-f", "--file", help="attached file", action="append", default=[])
+    return parser
 
-# 基础设置
-mail_host="smtp.qq.com"  #设置服务器
-mail_user=""   #用户名
-mail_pass=""   #口令 
+def main():
+    parser = get_parser()
+    args = parser.parse_args()
 
-sender = ''     # 发信人
-receivers = []  # 接收人列表
+    mail_host = args.mailhost
+    mail_user = args.mailuser
+    mail_pass = args.mailpass
+    sender = args.sender
+    receivers = args.recipient
+    mail_file = args.file
+    mail_message = args.message
+    mail_subject = args.subject
 
-# 解析参数
-mail_file_path=""
-mail_message=""
-mail_subject=""
-
-if len(sys.argv) < 2 or sys.argv[1] != "send":
-        usage()
+    if sender == "" or len(receivers) == 0:
+        parser.print_help()
         exit()
 
-opts,args = getopt.getopt(sys.argv[2:], '-h-t:-m:-s:-f:',['help','to','message','subject','file'])
-for opt_name,opt_value in opts:
-        if opt_name in ('-h','--help'):
-                usage()
-                exit()
-        if opt_name in ('-t','--to'):
-                receivers.append(opt_value)
-        if opt_name in ('-m','--message'):
-                mail_message = opt_value
-        if opt_name in ('-s','--subject'):
-                mail_subject = opt_value
-        if opt_name in ('-f','--file'):
-                mail_file_path = opt_value
+    msgRoot = MIMEMultipart()
+    msgRoot['From'] = sender
+    msgRoot['To'] =  ",".join(str(i) for i in receivers)
+    msgRoot['Subject'] = Header(mail_subject, 'utf-8')
 
-# 邮件构造
-msgRoot = MIMEMultipart()
-msgRoot['From'] = Header("cc机器人", 'utf-8')
-toMember = ''.join(str(i) for i in receivers)
-msgRoot['To'] =  Header(toMember, 'utf-8')
+    txtatt=MIMEText(mail_message, 'plain', 'utf-8')
+    msgRoot.attach(txtatt)
 
-# 邮件主题
-msgRoot['Subject'] = Header(mail_subject, 'utf-8')
+    try:
+        for file_path in mail_file:
+            send_file = open(file_path, "rb").read()
+            fileatt = MIMEText(send_file, "base64", "utf-8")
+            fileatt['Content-Type'] = 'application/octet-stream'
+            fileatt['Content-Disposition'] = "attachment;filename=" + os.path.basename(file_path)
+            msgRoot.attach(fileatt)
+    except Exception as e:
+        print(e)
+        exit()
 
-# 文本附件
-txtatt=MIMEText(mail_message, 'plain', 'utf-8')
-msgRoot.attach(txtatt)
-
-# 文件附件
-if mail_file_path != "":
-        send_file = open(mail_file_path, "rb").read()
-        fileatt = MIMEText(send_file, "base64", "utf-8")
-        fileatt['Content-Type'] = 'application/octet-stream'
-        fileatt['Content-Disposition'] = "attachment;filename=" + os.path.basename(mail_file_path)
-        msgRoot.attach(fileatt)
-
-# 发送邮件
-try:
-        smtpObj = smtplib.SMTP() 
-        smtpObj.connect(mail_host, 25)    # 25 为 SMTP 端口号
+    # 发送邮件
+    try:
+        smtpObj = smtplib.SMTP_SSL(mail_host, 465)
         smtpObj.login(mail_user,mail_pass)  
         smtpObj.sendmail(sender, receivers, msgRoot.as_string())
-        print ("Send OK")
-except smtplib.SMTPException:
-        print ("Error: sendmail")
+        print("Send OK")
+    except smtplib.SMTPException as e:
+        print("Error: sendmail: %d" % e)
+
+if __name__ == '__main__':
+    main()
