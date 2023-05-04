@@ -40,7 +40,7 @@ function _clean
     case $ostype in
         centos|pve|ubuntu)
             # do something
-            normalp "$partname not support clean"
+            warning "$partname not support clean"
         ;;
         *)
             error "$ostype not support now"
