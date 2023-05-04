@@ -1,5 +1,6 @@
 [common]
 shutdown_per=20
+sendmail=1
 
 # ubuntu and dsm need set root password and permit root login
 

@@ -1,6 +1,8 @@
 [common]
 # default log path: prefix/log/backup_disk/
 log_path=../../log/backup_disk
+# send sys mail when script end
+sendmail=1
 
 # Customize backup conf
 [Backup1]

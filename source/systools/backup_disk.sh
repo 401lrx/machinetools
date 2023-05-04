@@ -41,7 +41,7 @@ function backuplog
 	while read line || [[ -n ${line} ]];do
 		echo "$timenow|"$line
 		echo "$timenow|"$line >> $log_file
-		echo "$timenow|"$line >> $work_dir/maillog.log
+		echo "$timenow|"$line >> $work_dir/maillog.txt
 	done < <(echo "$1")
 }
 
@@ -143,6 +143,13 @@ for section in $(bash parseini.sh section $backup_conf); do
 done
 
 backuplog "end backup"
+
+# 发邮件
+sendmail=$(bash parseini.sh var $backup_conf "common" "sendmail")
+if [[ "$sendmail" == "1" ]];then
+	backuplog "sysmail.sh backup end, pls check log. Weekly Backup $work_dir/maillog.txt"
+	bash sysmail.sh "backup end, pls check log." "Weekly Backup" "$work_dir/maillog.txt"
+fi
 
 # 删除临时目录
 rm -rf $work_dir

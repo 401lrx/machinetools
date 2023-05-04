@@ -20,6 +20,7 @@ if [[ "x$left_bat_per" == "x" ]];then left_bat_per=0; fi
 shutdown_per=$(bash parseini.sh var $conf "common" "shutdown_per")
 if [[ "x$shutdown_per" == "x" ]];then shutdown_per=20; fi
 
+shutdown_ip=()
 if (( $left_bat_per < $shutdown_per )); then
     for section in $(bash parseini.sh section $conf); do
     	if [[ "$section" == "common" ]];then continue; fi
@@ -28,5 +29,12 @@ if (( $left_bat_per < $shutdown_per )); then
         passwd=$(bash parseini.sh var $conf $section "passwd")
 
         bash shutdown_ip.sh "$ip" "$user" "$passwd"
+        shutdown_ip=("${shutdown[@]}" "$ip")
     done
+fi
+
+sendmail=$(bash parseini.sh var $conf "common" "sendmail")
+if [[ "$sendmail" == "1" ]];then
+    mailinfo="Shutdown svrs: ${shutdonw_ip[@]}"
+	bash sysmail.sh "$mailinfo" "UPS Low and Poweroff" 
 fi

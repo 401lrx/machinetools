@@ -12,8 +12,9 @@ fi
 for disk in "$@";do
     smartresult=`smartctl -H ${disk} | sed -n "s/\(.\+\)\(result: \)\(.\+\)/\3/p"`
     if [[ "x${smartresult}" != "xPASSED" ]];then
-        echo "[!!! ATTENTION !!!] disk ${disk} may has error !"
-        echo "${disk} not healthy, pls check!!!
+        msg=$(cat << EOF
+[!!! ATTENTION !!!] disk ${disk} may has error !
+${disk} not healthy, pls check!!!
 disk info:
 `smartctl -i ${disk}`
 
@@ -24,7 +25,11 @@ disk info2:
 `smartctl -A ${disk}`
 
 disk error:
-`smartctl -l error ${disk}`"
+`smartctl -l error ${disk}`
+EOF
+)
+        echo $msg
+        bash sysmail.sh "$msg" "Disk Smart Check Error"
     else
         echo "[healthy] disk ${disk} is healthy! !"
     fi
