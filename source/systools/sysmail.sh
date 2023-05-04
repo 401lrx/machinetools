@@ -29,4 +29,4 @@ mailhost=$(bash parseini.sh var $conf "common" "mailhost")
 mailuser=$(bash parseini.sh var $conf "common" "mailuser")
 mailpass=$(bash parseini.sh var $conf "common" "mailpass")
 
-python sendmail.py --sender "$sender" -t "$to" --mailhost "$mailhost" --mailuser "$mailuser" --mailpass "$mailpass" -m "$message" -s "$subject" "${file_cmd[@]}"
+python sendmail.py --sender "$sender" -t "$to" --mailhost "$mailhost" --mailuser "$mailuser" --mailpass "$mailpass" -m "$message" -s "$subject" "${file_cmd[@]}" 2>&1 >/dev/null

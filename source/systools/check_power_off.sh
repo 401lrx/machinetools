@@ -31,10 +31,9 @@ if (( $left_bat_per < $shutdown_per )); then
         bash shutdown_ip.sh "$ip" "$user" "$passwd"
         shutdown_ip=("${shutdown[@]}" "$ip")
     done
-fi
-
-sendmail=$(bash parseini.sh var $conf "common" "sendmail")
-if [[ "$sendmail" == "1" ]];then
-    mailinfo="Shutdown svrs: ${shutdonw_ip[@]}"
-	bash sysmail.sh "$mailinfo" "UPS Low and Poweroff" 
+    sendmail=$(bash parseini.sh var $conf "common" "sendmail")
+    if [[ "$sendmail" == "1" ]];then
+        mailinfo="Shutdown svrs: ${shutdown_ip[@]}"
+    	bash sysmail.sh "$mailinfo" "UPS Low and Poweroff" 
+    fi
 fi
