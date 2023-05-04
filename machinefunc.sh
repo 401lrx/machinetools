@@ -85,10 +85,11 @@ function cleanParts
         if [ -f ${controlscript} ];then
             chmod +x ${controlscript}
             bash ${controlscript} clean
-            if [[ $? -ne 0 ]];then
-                error "Clean ${onepart} failed !!!"
-            else
+            local ret=$?
+            if [[ $ret -eq 0 ]];then
                 success "Clean of ${onepart} completed"
+            elif [[ $ret -ne 100 ]];then
+                error "Clean ${onepart} failed !!!"
             fi
         else
             error "The action control for ${onepart} could not be found, please check file ${controlscript}"
