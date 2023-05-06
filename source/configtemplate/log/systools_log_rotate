@@ -1,0 +1,9 @@
+/work/log/*/*.log {
+    daily
+    rotate 7
+    dateext
+    missingok
+    notifempty
+    nocompress
+    su root root
+}

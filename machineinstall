@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROGRAM_NAME=$0
-cd `(dirname $PROGRAM_NAME)`
+cd `dirname $PROGRAM_NAME`
 source machinefunc.sh
 
 function usage()
@@ -17,6 +17,7 @@ Arguments:
     -c, --clean         Remove installed parts 
     -p, --part=PART     Specify a part to install or clean
     -l, --list-part     List all installable parts
+        --prefix        Set the install path
 
 EOF
 }
@@ -32,12 +33,13 @@ if [[ $# == 0 ]];then
 fi
 
 short_opts="hicp:l"
-long_opts="help,install,clean,part:,list-part,reinstall"
+long_opts="help,install,clean,part:,list-part,reinstall,prefix:"
 TEMP=$(getopt -n $PROGRAM_NAME -o "$short_opts" -l "$long_opts" -- "$@") || \
 { error "Error parsing arguments. Try $PROGRAM_NAME --help"; exit 1; }
 
 PART="all"
 EXE=""
+PREFIX=$install_path
 
 eval set -- "$TEMP"
 while true; do
@@ -73,6 +75,9 @@ while true; do
             fi
             shift; continue
         ;;
+        --prefix)
+            PREFIX=$(realpath "$2"); shift 2; continue
+        ;;
         --)
             # no more arguments to parse
             break
@@ -83,6 +88,9 @@ while true; do
         ;;
     esac
 done
+
+export MACHINE_INIT_PREFIX=$PREFIX
+export MACHINE_INIT_WORK_DIR=`pwd`
 
 case $EXE in
     install)
@@ -102,3 +110,6 @@ case $EXE in
         normalp "Nothing has been done"
     ;;
 esac
+
+unset MACHINE_INIT_PREFIX
+unset MACHINE_INIT_WORK_DIR

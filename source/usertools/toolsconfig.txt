@@ -1,0 +1,11 @@
+# 详细配置参数参考toolsconfig.txt.sample
+############################ 环境配置 #############################
+:env-home:
+       --setcmd export SSH_DEFAULT_USER=homecc
+       --setcmd export SSH_OPT='-p 22'
+       --setcmd export SCP_OPT='-P 22'
+
+######################### 其他环境参数配置 ########################
+work
+        --setpath /work/
+

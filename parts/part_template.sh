@@ -15,7 +15,7 @@ EOF
 
 function _install
 {
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             #replace here ToDo something
@@ -29,7 +29,7 @@ function _install
 
 function _clean
 {
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             #replace here ToDo something
@@ -53,7 +53,7 @@ case $op in
             read -p "Do you wish to install ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _install; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done
@@ -63,7 +63,7 @@ case $op in
             read -p "Do you wish to clean ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _clean; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done

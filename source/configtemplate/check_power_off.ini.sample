@@ -1,0 +1,10 @@
+[common]
+shutdown_per=20
+sendmail=1
+
+# ubuntu and dsm need set root password and permit root login
+
+[shutdown1]
+ip=192.168.1.1
+user=user
+passwd=passwd

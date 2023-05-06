@@ -1,0 +1,13 @@
+/work/app/nginx/log/*.log {
+    daily
+    rotate 7
+    dateext
+    missingok
+    notifempty
+    delaycompress
+    su root root
+    sharedscripts
+    postrotate
+        docker exec kod bash -c "if [ -f /run/nginx.pid ]; then kill -USR1 `docker exec nginx cat /run/nginx.pid`; fi"
+    endscript
+}

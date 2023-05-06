@@ -15,13 +15,12 @@ EOF
 
 function _install
 {
-    steps=(
-        mymail
+    local steps=(
         preinstall
         selinux
-        sshconfig
+        #sshconfig
     )
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             for step in ${steps[@]};do
@@ -37,11 +36,11 @@ function _install
 
 function _clean
 {
-    ostype=$(getostype)
+    local ostype=$(getostype)
     case $ostype in
         centos|pve|ubuntu)
             # do something
-            normalp "$partname not support clean"
+            warning "$partname not support clean"
         ;;
         *)
             error "$ostype not support now"
@@ -61,7 +60,7 @@ case $op in
             read -p "Do you wish to install ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _install; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done
@@ -71,7 +70,7 @@ case $op in
             read -p "Do you wish to clean ${partname}(yes/no)?" yn
             case $yn in
                 [Yy]* ) _clean; break;;
-                [Nn]* ) exit 1;;
+                [Nn]* ) exit 100;;
                 * ) normalp "Please answer yes or no";;
             esac
         done

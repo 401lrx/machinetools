@@ -1,8 +1,14 @@
 #! /usr/bin/bash
 
-host="192.168.5.211"
-usr="root"
-password="19950127"
+if [ $# -lt 3 ];then
+	echo "$0 host usr password"
+	echo "Example: $0 192.168.1.1 test testpass"
+	exit 1
+fi
+
+host=$1
+usr=$2
+password=$3
 cmd="poweroff"
 
 /usr/bin/expect << EOF

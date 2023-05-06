@@ -1,11 +1,13 @@
 #!/bin/bash
 source config.sh
 
-RED="\\E[5;33;41m[ERROR]"
+RED="\\E[5;33;41m"
 GREEN="\\E[1;32m"
+YELLOW="\\E[1;33m"
 RESET="\\E[0m"
 success() { [ $# -ge 1 ] && echo -e $GREEN"$@" $RESET; }
-error() { [ $# -ge 1 ] && echo -e $RED"$@" $RESET; }
+error() { [ $# -ge 1 ] && echo -e $RED"[ERROR] ""$@" $RESET; }
+warning() { [ $# -ge 1 ] && echo -e $YELLOW"[WARNING] ""$@" $RESET; }
 normalp() { [ $# -ge 1 ] && echo -e $RESET"$@"; }
 
 function listAllParts
@@ -19,11 +21,12 @@ function listAllParts
 
 function installParts
 {
-    PART=all
+    local PART=all
     if [[ $# -ge 1 ]];then
         PART=$1
     fi
 
+    local installparts=""
     if [[ "$PART" == "all" ]];then
         normalp "Install all part"
         installparts=("${allparts[@]}")
@@ -32,38 +35,40 @@ function installParts
         installparts=($PART)
     fi
 
-    total_start_time=`date +%s`
+    local total_start_time=`date +%s`
     normalp "Begin install ... Now: `date '+%Y-%m-%d %H:%M:%S'`"
 
     for onepart in ${installparts[@]};do
-        controlscript=parts/${onepart}/part.sh
+        local controlscript=parts/${onepart}/part.sh
         if [ -f ${controlscript} ];then
-            start_time=`date +%s`
+            local start_time=`date +%s`
             normalp "Begin install ${onepart}, begin at: `date '+%Y-%m-%d %H:%M:%S'`"
             chmod +x ${controlscript}
             bash ${controlscript} install
-            if [[ $? -ne 0 ]];then
-                error "Install ${onepart} failed !!!"
-            else
-                end_time=`date +%s`
+            local ret=$?
+            if [[ $ret -eq 0 ]];then
+                local end_time=`date +%s`
                 success "Installation of ${onepart} completed, end at: `date '+%Y-%m-%d %H:%M:%S'`, running time: $((${end_time}-${start_time}))"
+            elif [[ $ret -ne 100 ]];then
+                error "Install ${onepart} failed !!!"
             fi
         else
             error "The action control for ${onepart} could not be found, please check file ${controlscript}"
         fi
     done
 
-    total_end_time=`date +%s`
+    local total_end_time=`date +%s`
     normalp "End install ... Now: `date '+%Y-%m-%d %H:%M:%S'`, total running time: $((${total_end_time}-${total_start_time}))"
 }
 
 function cleanParts
 {
-    PART=all
+    local PART=all
     if [[ $# -ge 1 ]];then
         PART=$1
     fi
 
+    local cleanparts=""
     if [[ "$PART" == "all" ]];then
         normalp "Clean all part"
         cleanparts=("${allparts[@]}")
@@ -72,24 +77,25 @@ function cleanParts
         cleanparts=($PART)
     fi
 
-    total_start_time=`date +%s`
+    local total_start_time=`date +%s`
     normalp "Begin clean ..."
 
     for onepart in ${cleanparts[@]};do
-        controlscript=parts/${onepart}/part.sh
+        local controlscript=parts/${onepart}/part.sh
         if [ -f ${controlscript} ];then
             chmod +x ${controlscript}
             bash ${controlscript} clean
-            if [[ $? -ne 0 ]];then
-                error "Clean ${onepart} failed !!!"
-            else
+            local ret=$?
+            if [[ $ret -eq 0 ]];then
                 success "Clean of ${onepart} completed"
+            elif [[ $ret -ne 100 ]];then
+                error "Clean ${onepart} failed !!!"
             fi
         else
             error "The action control for ${onepart} could not be found, please check file ${controlscript}"
         fi
     done
 
-    total_end_time=`date +%s`
+    local total_end_time=`date +%s`
     normalp "End clean ... total running time: $((${total_end_time}-${total_start_time}))"
 }
