@@ -91,6 +91,9 @@ done
 
 export MACHINE_INIT_PREFIX=$PREFIX
 export MACHINE_INIT_WORK_DIR=`pwd`
+if [[ "$permitcustomuser" == "1" ]];then
+    export MACHINE_INIT_CUSTOM_USER=1
+fi
 
 case $EXE in
     install)

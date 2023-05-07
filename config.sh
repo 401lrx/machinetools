@@ -5,5 +5,5 @@ machineinit
 usertools
 systools
 )
-
 install_path=/work
+# permitcustomuser=1

@@ -104,7 +104,7 @@ function _install
 
 	# limit to homecc now
 	local user="homecc"
-	if false ;then
+	if [[ "$MACHINE_INIT_CUSTOM_USER" == "1" ]] ;then
 		while true; do
 			read -p "Create usertools, please enter user name:" user
 			case $user in
@@ -139,7 +139,7 @@ function _clean
 {
 	local user="homecc"
 	# limit to homecc now
-	if false ;then
+	if [[ "$MACHINE_INIT_CUSTOM_USER" == "1" ]] ;then
 		while true; do
 			read -p "Clean usertools, please enter user name:" user
 			break
