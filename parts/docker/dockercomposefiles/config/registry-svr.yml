@@ -9,3 +9,5 @@ storage:
 http:
   addr: 0.0.0.0:5000
   relativeurls: false
+  headers:
+    X-Content-Type-Options: [nosniff]
